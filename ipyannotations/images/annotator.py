@@ -79,12 +79,12 @@ class Annotator(LabellingWidgetMixin, widgets.VBox):
         )
 
         extra_buttons = [self.undo_button, self.skip_button]
-        if hasattr(self.canvas, "editing"):
-            self.edit_button = widgets.ToggleButton(
-                description="Edit", icon="pencil", layout=button_layout
-            )
-            widgets.link((self.edit_button, "value"), (self.canvas, "editing"))
-            extra_buttons.append(self.edit_button)
+        # if hasattr(self.canvas, "editing"):
+        #     self.edit_button = widgets.ToggleButton(
+        #         description="Edit", icon="pencil", layout=button_layout
+        #     )
+        #     widgets.link((self.edit_button, "value"), (self.canvas, "editing"))
+        #     extra_buttons.append(self.edit_button)
 
         extra_buttons = widgets.HBox(
             extra_buttons,

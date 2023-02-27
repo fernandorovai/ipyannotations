@@ -142,6 +142,27 @@ class BoundingBox:
     def __post_init__(self):
         self.xyxy = tuple(map(round, self.xyxy))
 
+    def set_label(self, lbl):
+        self.label = lbl
+
+    def move_box(self, new_x: int, new_y:int, prev_xy:list):
+        if prev_xy is None:
+            return
+        
+        w,h = list(self.size)
+        new_xy = list(self.xyxy)
+        x0,y0,_,_ = self.xyxy
+        
+        deltaX = int(new_x - prev_xy[0])
+        deltaY = int(new_y - prev_xy[1])
+        
+        new_xy[0] = int(x0 + deltaX)
+        new_xy[1] = int(y0 + deltaY)
+        new_xy[2] = int(new_xy[0] + w)
+        new_xy[3] = int(new_xy[1] + h)
+      
+        self.xyxy = tuple(new_xy)
+
     def move_corner(self, idx: int, new_x: int, new_y: int):
         """Move a corner of the bounding
 
@@ -158,6 +179,16 @@ class BoundingBox:
         new_xy[x_idx] = round(new_x)
         new_xy[y_idx] = round(new_y)
         self.xyxy = tuple(new_xy)  # type: ignore
+
+    @property
+    def center(self) -> List[Tuple[int, int]]:
+        x0, y0, x1, y1 = self.xyxy
+        return [(x0+x1)//2, (y0+y1)//2]
+
+    @property
+    def size(self) -> List[Tuple[int, int]]:
+        x0, y0, x1, y1 = self.xyxy
+        return [(x1-x0), (y1-y0)]
 
     @property
     def corners(self) -> List[Tuple[int, int]]:

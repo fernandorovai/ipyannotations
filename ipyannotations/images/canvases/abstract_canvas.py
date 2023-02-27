@@ -19,7 +19,6 @@ class AbstractAnnotationCanvas(MultiCanvas):
 
     image_contrast = Float(default_value=1, min=0, max=10)
     image_brightness = Float(default_value=1, min=0, max=10)
-
     def __init__(  # noqa: D001
         self,
         size: Tuple[int, int] = (700, 500),
@@ -37,11 +36,13 @@ class AbstractAnnotationCanvas(MultiCanvas):
         self.interaction_canvas.on_mouse_down(self.on_click)
         self.interaction_canvas.on_mouse_move(self.on_drag)
         self.interaction_canvas.on_mouse_up(self.on_release)
+        self.interaction_canvas.on_key_down(self.on_key_down)
 
         self.current_image: Optional[widgets.Image] = None
         self.dragging: Optional[Callable[[int, int], None]] = None
         self.error_output_widget = widgets.Output()
-
+        self.prev_xy = [0,0]
+        
         # register re_draw as handler for obacity changes
         # note this is done here rather than as a decorator as re_draw is
         # an abstract method for now.
@@ -95,6 +96,10 @@ class AbstractAnnotationCanvas(MultiCanvas):
 
     @abc.abstractmethod
     def on_release(self, x: float, y: float):  # noqa: D001
+        pass
+    
+    @abc.abstractmethod
+    def on_key_down(self, key, shift_key, ctrl_key, meta_key):  # noqa: D001
         pass
 
     @abc.abstractmethod
